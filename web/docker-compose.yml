@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  django:
+    build:
+      context: .
+    volumes:
+      - ./mysite:/var/web/mysite
+      - ./static_nginx:/var/web/static_nginx
+    environment:
+      - SECRET_KEY=hellokitty&supperhero
+      - ALLOWED_HOSTS=172.31.0.24,localhost
+    command: sh -c 'sh start.sh'
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ./static_nginx:/var/web
+    ports:
+      - "8081:8080"
+    depends_on:
+      - django
